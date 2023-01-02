@@ -1,13 +1,18 @@
-import React from 'react';
-import { Button } from 'antd';
+import React,{useState} from 'react';
+import { FloatButton} from 'antd';
 
 import './App.scss';
+import ChatBox from './components/ChatBox/ChatBox';
 
 function App() {
+
+  const [open, setOpen] = useState<boolean>(false);
   return (
     <div className="App">
-    
-     <Button className='main-button'>click me!</Button>
+    {open && <>
+      <ChatBox/>
+    </>}
+     <FloatButton className='main-button' description='Ask me!' type='primary' onClick={()=>setOpen(state=>!state)}/>
     </div>
   );
 }

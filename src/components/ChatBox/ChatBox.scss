@@ -1,0 +1,97 @@
+* {
+  box-sizing: border-box;
+}
+.chat-box {
+  box-sizing: border-box;
+  position: absolute;
+  right: 6vw;
+  bottom: 12vh;
+  width: 350px;
+  height: 500px;
+  border-radius: 10px 10px;
+  border: 1px solid paleturquoise;
+  transition: all 0.3s linear;
+  &.active {
+    width: 90vw;
+    height: 80vh;
+  }
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.2rem 1rem;
+    background-color: paleturquoise;
+    border-radius: 10px 10px 0 0;
+    span {
+      font-weight: bold;
+      font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+      font-size: small;
+    }
+    .title-btn {
+      font-size: small;
+    }
+  }
+  .body {
+  }
+  .input {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 350px;
+    height: fit-content;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: paleturquoise;
+    border-radius: 0px 0px 10px 10px;
+    box-sizing: border-box;
+
+    &.active {
+      .current-input {
+        .send-btn {
+          right: 70px;
+        }
+      }
+    }
+    .input-history {
+      overflow-x: auto;
+      width: 90%;
+      scroll-behavior: smooth;
+      height: fit-content;
+      padding: 2px;
+      .countries {
+        background-color: aliceblue;
+        margin-left: 3px;
+        border-radius: 3px;
+        padding: 2px;
+      }
+    }
+    .current-input {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      width: 90%;
+      border-radius: 8px;
+      margin: 5px;
+      .antd-input-box {
+        border-radius: 8px;
+      }
+      .send-btn {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        right: 20px;
+        z-index: 4px !important;
+        cursor: pointer;
+        border: none;
+        box-sizing: border-box;
+        height: 30px;
+        width: 10px;
+      }
+    }
+  }
+}
