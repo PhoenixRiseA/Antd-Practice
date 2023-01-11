@@ -1,29 +1,50 @@
-import React, { useMemo, useState, useRef } from 'react';
-import { Button, Input } from 'antd';
-import { SendOutlined } from '@ant-design/icons';
-import './ChatBox.scss';
+import React, { useMemo, useState, useRef, useEffect } from "react";
+import { Button, Input } from "antd";
+import { SendOutlined, UserOutlined } from "@ant-design/icons";
+import "./ChatBox.scss";
+import { Flags } from "../FlagsComponent/Flags";
+
+export type chatHistoryProps = {
+  countries: string[];
+};
+
 const ChatBox: React.FC = () => {
   const [toggleBox, setToggleBox] = useState<boolean>(true);
-  const [countryNames, setCountryNames] = useState<string>('');
-  const countryNamesRef = useRef<string>('');
+  const [countryNames, setCountryNames] = useState<string>("");
+  const countryNamesRef = useRef<string>("");
   countryNamesRef.current = countryNames;
-  const [chatHistory, setChatHistory] = useState<string[]>([]);
-
+  const [chatHistory, setChatHistory] = useState<chatHistoryProps[]>([]);
+  const [mount, setMount] = useState<boolean>(false);
+  useEffect(() => {
+    setMount(true);
+    return () => {
+      setMount(false);
+    };
+  }, []);
   const chatHistoryMemo = useMemo(
     () =>
-      chatHistory.map((countries) => (
-        <span className="countries">{countries.toString()} </span>
+      chatHistory?.map((chatHistoryObject) => (
+        <div className="countries">
+          <span>{chatHistoryObject?.countries}</span>{" "}
+        </div>
       )),
     [chatHistory]
   );
 
   const historyHandler = () => {
-    setChatHistory((state) => [...state, countryNamesRef.current]);
-    countryNamesRef.current = '';
+    setChatHistory((state) => {
+      return [...state, { countries: [countryNamesRef.current] }];
+    });
+
+    countryNamesRef.current = "";
   };
 
   return (
-    <div className={`chat-box${!toggleBox ? ' active' : ''}`}>
+    <div
+      className={`chat-box${mount ? " open" : ""}${
+        !toggleBox ? " active" : ""
+      }`}
+    >
       <div className="title">
         <span>Country Flags</span>
         <Button
@@ -32,30 +53,30 @@ const ChatBox: React.FC = () => {
           type="primary"
           onClick={() => setToggleBox((state) => !state)}
         >
-          {toggleBox ? 'Expand' : 'Collapse'}
+          {toggleBox ? "Expand" : "Collapse"}
         </Button>
       </div>
-      <div className={`body${!toggleBox ? ' active' : ''}`}></div>
-      <div className={`input${!toggleBox ? ' active' : ''}`}>
-        <div className="input-history">{chatHistoryMemo}</div>
+      <div className={`body${!toggleBox ? " active" : ""}`}></div>
+      <div className={`input${!toggleBox ? " active" : ""}`}>
+        <div
+          className={`input-history${
+            chatHistoryMemo?.length > 0 ? " active" : ""
+          }`}
+        >
+          {chatHistoryMemo}
+        </div>
         <div className="current-input">
           <Input
-            placeholder="Type country names here..."
-            className="antd-input-box"
+            style={{ width: "calc(100% - 2vw)" }}
             onChange={(e) => {
               setCountryNames(e.target.value);
             }}
-            value={countryNames}
-            onPressEnter={historyHandler}
-            allowClear
-          />
-          <Button className="send-btn" onClick={historyHandler}>
-            {<SendOutlined className="antd-send-icon" />}
-          </Button>
+            suffix={<SendOutlined onClick={historyHandler} />}
+          ></Input>
         </div>
       </div>
     </div>
   );
 };
 
-export default ChatBox;
+export default React.memo(ChatBox);
